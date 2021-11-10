@@ -1,0 +1,25 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+
+.bam {
+ width: 960px;
+ height: 960px;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  border: black 1px solid;
+  /*grid-template-columns: repeat(16, 1fr);*/
+}
+.bam div {
+  border: black 1px solid;
+  margin: 0;
+  padding: 0;
+ 
+}
+
+.options{
+  padding-bottom: 30px;
+}
