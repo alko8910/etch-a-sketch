@@ -1,79 +1,77 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './App.css';
 
 
 function App() {
 
-  const [size, setSize] = useState(16);
-  //const [hoverToBlack, setHoverToBlack] = useState();
+  const createNullArray = (size) => {
+    const arr = [];
+    for (let i = 0; i < size; i++) {
+      arr.push(null);
+    }
+
+    return arr;
+  }
+
+  const [hover, setHover] = useState('white');
+  const [colors, setColors] = useState(createNullArray(256));
+
+  const resetBoard = (size) => setColors(createNullArray(size))
 
   const changeSize = () => {
-    let promptValue = prompt("What size of board dou you want?")
-    if(promptValue > 15 & promptValue < 101 || !promptValue){
-    setSize(promptValue)
-    setHover('#fafafa')
-  } else {
-
-    promptValue = prompt("You must choose number between 1 and 100!")
+    let promptValue;
+    do {
+       promptValue = prompt("What size of board dou you want? Please choose number between 16 and 100!")
+      if (promptValue > 15 && promptValue < 101 ) {
+        resetBoard(promptValue * promptValue)
+        setHover(null)
+      }
+    } while(promptValue < 16 || promptValue > 100 || isNaN(promptValue));
   }
-  }
-
-  // useEffect(changeSize, [])
-
-const [hover, setHover] = useState('#fafafa');
-//const [randomColor, setRadnomColor] = useState('');
-//const [hoverColor, setHoverColor] = ('')
 
 
-
-const style = {
-  background: `${hover}` 
-}
 const divStyle = {
-  gridTemplateColumns: `repeat(${size}, 1fr)`,
-  
+  gridTemplateColumns: `repeat(${Math.sqrt(colors.length)}, 1fr)`,
 }
 
 
-const createDivs = () => {
-  const divs = [];
-
-  for (let i =0; i < (size * size); i++){
-    divs.push(
-     <div key={i} onMouseEnter={() => setHover('blue')} style={style} >
-         
-      </div>
-    
-    )
-    console.log(hover)
-  }
-
- return divs;
-}
-/*
-const hoverToBlackk = () => {
-  setHoverToBlack('black')
-}
-*/
-const clearBoard = () => {
-  setHover('white');
+const getRandomColor = () => {
+  const c1 =  Math.floor(Math.random() * 256).toString(16);
+  const c2 = Math.floor(Math.random() * 256).toString(16);
+  const c3 = Math.floor(Math.random() * 256).toString(16);
+  return `#${c1}${c2}${c3}`;
 }
 
-const randomColor = () => {
-  let c1 =  Math.floor(Math.random() * 256).toString(16);
-  var c2 = Math.floor(Math.random() * 256).toString(16);
-  var c3 = Math.floor(Math.random() * 256).toString(16);
-  setHover(`#${c1}${c2}${c3}`)
-  console.log(hover)
-}
+const colorTile = (index) => {
+  setColors(colors.map((e, j) => {
+    if (index === j) {
+      if (hover === 'random') {
+        return getRandomColor();
+      } else {
+        return hover;
+      }
+    } else {
+      return e;
+    }
+  }))
+};
+
+
+const createDivs = () => colors.map((col, i) => (
+  <div
+    key={i}
+    onMouseEnter={() => colorTile(i)}
+    style={{ background: colors[i] }}
+  />
+));
 
   return (
     <div className="App">
       <div className='options'>
         <button onClick={changeSize}>Reset Board</button>
         <button onClick={() => setHover('black')}>Black</button>
-        <button onClick={randomColor}>Random Color</button>
-        <button onClick={clearBoard}>Clear Board</button>
+        <button onClick={() => setHover('random')}>Random Color</button>
+        <button onClick={() => resetBoard(colors.length)}>Clear Board</button>
       </div>
       <div className="bam" style={divStyle}>
       { createDivs()}
