@@ -22,11 +22,11 @@ function App() {
     let promptValue;
     do {
        promptValue = prompt("What size of board dou you want? Please choose number between 16 and 100!")
-      if (promptValue > 15 && promptValue < 101 ) {
+      if (promptValue > 15 && promptValue < 101  ) {
         resetBoard(promptValue * promptValue)
         setHover(null)
       }
-    } while(promptValue < 16 || promptValue > 100 || isNaN(promptValue));
+    } while(promptValue < 16 || promptValue > 100 || isNaN(promptValue) || promptValue % 1 !== 0);
   }
 
 

@@ -1,1 +1,0 @@
-<button>Reset Board</button>
